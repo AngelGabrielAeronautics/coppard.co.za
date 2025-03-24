@@ -1,0 +1,15 @@
+.container {
+    padding: 20px;
+  }
+  .main {
+    max-width: 800px;
+    margin: auto;
+    text-align: center;
+  }
+  .title {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+  }
+  .description {
+    font-size: 1.2em;
+  }
