@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function Navbar() {
   const styles = {
     nav: {
@@ -14,9 +16,9 @@ export default function Navbar() {
 
   return (
     <nav style={styles.nav}>
-      <a href="/" style={styles.link}>Home</a>
-      <a href="/about" style={styles.link}>About</a>
-      <a href="/contact" style={styles.link}>Contact</a>
+      <Link href="/" legacyBehavior><a style={styles.link}>Home</a></Link>
+      <Link href="/about" legacyBehavior><a style={styles.link}>About</a></Link>
+      <Link href="/contact" legacyBehavior><a style={styles.link}>Contact</a></Link>
     </nav>
   );
 }
