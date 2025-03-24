@@ -6,9 +6,9 @@ export default function About() {
     <div className={styles.container}>
       <Navbar />
       <main className={styles.main}>
-        <h1 className={styles.title}>À propos de l'artiste</h1>
+        <h1 className={styles.title}>À propos de lartiste</h1>
         <p className={styles.description}>
-          D. Coppard est un artiste passionné par l'expression créative, combinant des techniques traditionnelles avec une vision contemporaine.
+        D. Coppard is a fine artist whose work blends traditional techniques with a contemporary vision. With a passion for expressive forms and abstract interpretations, his work invites viewers into a deep emotional journey.
         </p>
       </main>
     </div>
