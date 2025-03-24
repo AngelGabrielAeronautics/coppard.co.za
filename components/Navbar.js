@@ -16,9 +16,15 @@ export default function Navbar() {
 
   return (
     <nav style={styles.nav}>
-      <Link href="/" legacyBehavior><a style={styles.link}>Home</a></Link>
-      <Link href="/about" legacyBehavior><a style={styles.link}>About</a></Link>
-      <Link href="/contact" legacyBehavior><a style={styles.link}>Contact</a></Link>
+      <Link href="/" legacyBehavior>
+        <a style={styles.link}>Home</a>
+      </Link>
+      <Link href="/about" legacyBehavior>
+        <a style={styles.link}>About</a>
+      </Link>
+      <Link href="/contact" legacyBehavior>
+        <a style={styles.link}>Contact</a>
+      </Link>
     </nav>
   );
 }
