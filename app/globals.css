@@ -1,0 +1,414 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Photo-realistic frame styles */
+
+/* Dark wood frame with grain texture */
+.frame-dark-wood {
+  position: relative;
+  padding: 12px;
+  background: linear-gradient(30deg, #2c1a0e 0%, #3b2819 25%, #2c1a0e 50%, #3b2819 75%, #2c1a0e 100%);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8), 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.frame-dark-wood::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.1) 2px,
+    rgba(0, 0, 0, 0.1) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.frame-dark-wood::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* White gallery frame with beveled edge */
+.frame-white-gallery {
+  position: relative;
+  padding: 16px;
+  background: linear-gradient(45deg, #f0f0f0, #ffffff);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.frame-white-gallery::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(240, 240, 240, 0.5) 50%,
+    rgba(230, 230, 230, 0.5) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.frame-white-gallery::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Gold ornate frame with decorative pattern */
+.frame-gold-ornate {
+  position: relative;
+  padding: 16px;
+  background: linear-gradient(45deg, #d4af37 0%, #f9f295 20%, #d4af37 40%, #f9f295 60%, #d4af37 80%, #f9f295 100%);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3), 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.frame-gold-ornate::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 5px,
+    rgba(0, 0, 0, 0.05) 5px,
+    rgba(0, 0, 0, 0.05) 10px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.frame-gold-ornate::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Thin black modern frame */
+.frame-thin-black {
+  position: relative;
+  padding: 8px;
+  background: #000000;
+  box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.1), 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.frame-thin-black::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(40, 40, 40, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.frame-thin-black::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Antique bronze frame */
+.frame-antique-bronze {
+  position: relative;
+  padding: 14px;
+  background: linear-gradient(45deg, #614e1a 0%, #a77e3d 25%, #614e1a 50%, #a77e3d 75%, #614e1a 100%);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5), 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.frame-antique-bronze::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 3px,
+    rgba(0, 0, 0, 0.1) 3px,
+    rgba(0, 0, 0, 0.1) 6px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.frame-antique-bronze::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  border: 1px solid rgba(167, 126, 61, 0.3);
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Light wood frame */
+.frame-light-wood {
+  position: relative;
+  padding: 10px;
+  background: linear-gradient(30deg, #d2b48c 0%, #e5d3b3 25%, #d2b48c 50%, #e5d3b3 75%, #d2b48c 100%);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2), 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.frame-light-wood::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 4px,
+    rgba(139, 69, 19, 0.05) 4px,
+    rgba(139, 69, 19, 0.05) 8px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.frame-light-wood::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  right: 3px;
+  bottom: 3px;
+  border: 1px solid rgba(139, 69, 19, 0.1);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Silver metallic frame */
+.frame-silver-metallic {
+  position: relative;
+  padding: 10px;
+  background: linear-gradient(45deg, #c0c0c0 0%, #e8e8e8 25%, #c0c0c0 50%, #e8e8e8 75%, #c0c0c0 100%);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2), 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.frame-silver-metallic::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(192, 192, 192, 0.2) 50%,
+    rgba(255, 255, 255, 0.2) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.frame-silver-metallic::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  right: 3px;
+  bottom: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Gold simple frame */
+.frame-gold-simple {
+  position: relative;
+  padding: 10px;
+  background: linear-gradient(45deg, #b8860b 0%, #ffd700 50%, #b8860b 100%);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3), 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.frame-gold-simple::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(184, 134, 11, 0.2) 50%,
+    rgba(255, 255, 255, 0.2) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.frame-gold-simple::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  right: 3px;
+  bottom: 3px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* White floating frame */
+.frame-white-floating {
+  position: relative;
+  padding: 12px;
+  background: #ffffff;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1), 0 0 8px rgba(0, 0, 0, 0.2);
+}
+
+.frame-white-floating::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(255, 255, 255, 1) 0%, rgba(240, 240, 240, 1) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.frame-white-floating::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05), 0 4px 8px rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+  z-index: 2;
+}
+
