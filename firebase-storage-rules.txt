@@ -1,0 +1,22 @@
+// Firebase Storage Security Rules
+// Copy these rules to your Firebase console: https://console.firebase.google.com/project/[YOUR-PROJECT]/storage/rules
+
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Allow authenticated users to read and write to all paths
+    match /{allPaths=**} {
+      allow read;
+      allow write: if request.auth != null;
+    }
+    
+    // Specific rules for the paintings folder
+    match /paintings/{imageId} {
+      // Allow public read access to painting images
+      allow read;
+      // Allow authenticated users to upload and delete
+      allow write, delete: if request.auth != null;
+    }
+  }
+}
+

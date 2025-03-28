@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 45 24% 93%; /* #f2efe7 converted to HSL */
+    --foreground: 160 10% 15%; /* Dark grey with green undertone instead of black */
+
+    --card: 45 24% 93%; /* #f2efe7 for cards */
+    --card-foreground: 160 10% 15%; /* Dark grey with green undertone */
+
+    --popover: 45 24% 93%; /* #f2efe7 for popovers */
+    --popover-foreground: 160 10% 15%; /* Dark grey with green undertone */
+
+    --primary: 160 10% 15%; /* Dark grey with green undertone instead of black */
+    --primary-foreground: 45 24% 93%; /* #f2efe7 */
+
+    --secondary: 45 20% 85%; /* Slightly darker version for secondary */
+    --secondary-foreground: 160 10% 15%; /* Dark grey with green undertone */
+
+    --muted: 45 20% 85%; /* Slightly darker version for muted */
+    --muted-foreground: 160 10% 45%; /* Lighter version for muted text */
+
+    --accent: 45 20% 85%; /* Slightly darker version for accent */
+    --accent-foreground: 160 10% 15%; /* Dark grey with green undertone */
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 45 24% 93%; /* #f2efe7 */
+
+    --border: 45 20% 80%; /* Slightly darker border color */
+    --input: 45 20% 80%; /* Slightly darker input color */
+    --ring: 160 10% 15%; /* Dark grey with green undertone */
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 160 10% 10%; /* Dark mode background with green undertone */
+    --foreground: 45 24% 93%; /* #f2efe7 for text in dark mode */
+
+    --card: 160 10% 10%; /* Dark mode card with green undertone */
+    --card-foreground: 45 24% 93%; /* #f2efe7 */
+
+    --popover: 160 10% 10%; /* Dark mode popover with green undertone */
+    --popover-foreground: 45 24% 93%; /* #f2efe7 */
+
+    --primary: 45 24% 93%; /* #f2efe7 */
+    --primary-foreground: 160 10% 15%; /* Dark grey with green undertone */
+
+    --secondary: 160 10% 14.9%; /* Dark mode secondary with green undertone */
+    --secondary-foreground: 45 24% 93%; /* #f2efe7 */
+
+    --muted: 160 10% 14.9%; /* Dark mode muted with green undertone */
+    --muted-foreground: 45 20% 83.9%; /* Muted #f2efe7 */
+
+    --accent: 160 10% 14.9%; /* Dark mode accent with green undertone */
+    --accent-foreground: 45 24% 93%; /* #f2efe7 */
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 45 24% 93%; /* #f2efe7 */
+
+    --border: 160 10% 14.9%; /* Dark mode border with green undertone */
+    --input: 160 10% 14.9%; /* Dark mode input with green undertone */
+    --ring: 45 20% 83.1%; /* Slightly darker #f2efe7 for ring */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* Add custom styling for periods */
+  .period-accent {
+    color: #952617;
+  }
+}
+
+//
+Add these CSS rules to set your custom font for specific elements
+// For example, to use your custom font for headings:
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-custom);
+}
+
+//
+Or to use it for specific classes .custom-font {
+  font-family: var(--font-custom);
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll 30s linear infinite;
+}
+
+/* Add a utility class for the colored period that can be used inline */
+.colored-period {
+  color: #952617;
+}
+
