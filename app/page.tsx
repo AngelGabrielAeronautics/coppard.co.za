@@ -4,7 +4,6 @@ import { useState, useEffect } from "react"
 import { MainLayout } from "@/components/main-layout"
 import { PaintingCard } from "@/components/painting-card"
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
 import Image from "next/image"
 import { ColoredText } from "@/components/colored-text"
 import { ChevronDown, ChevronUp } from "lucide-react"
@@ -42,49 +41,12 @@ function getRelativeSize(dimensionsStr: string): { width: number; height: number
   return { width, height, scale: boundedScale }
 }
 
-// Update the collage layout function to ensure proper spacing and prevent overlaps
-function generateCollageLayout(paintings: any[]) {
-  // Create a copy of the paintings array to avoid modifying the original
-  const paintingsToArrange = [...paintings]
-
-  // Shuffle the array to get a random arrangement each time
-  for (let i = paintingsToArrange.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[paintingsToArrange[i], paintingsToArrange[j]] = [paintingsToArrange[j], paintingsToArrange[i]]
-  }
-
-  // Define grid-based positions for the collage with more spacing to prevent overlaps
-  // Each position has x, y coordinates (as pixels) and a z-index for layering
-  const positions = [
-    { x: 50, y: 50, z: 1 },
-    { x: 250, y: 30, z: 2 },
-    { x: 450, y: 70, z: 3 },
-    { x: 650, y: 40, z: 2 },
-    { x: 850, y: 90, z: 1 },
-    { x: 30, y: 220, z: 2 },
-    { x: 230, y: 200, z: 3 },
-    { x: 430, y: 240, z: 2 },
-    { x: 630, y: 210, z: 1 },
-    { x: 830, y: 250, z: 2 },
-    { x: 150, y: 380, z: 1 },
-    { x: 350, y: 360, z: 2 },
-  ]
-
-  // Limit the number of paintings to display to avoid overcrowding
-  const maxPaintings = Math.min(paintingsToArrange.length, positions.length)
-
-  // Assign positions to paintings
-  return paintingsToArrange.slice(0, maxPaintings).map((painting, index) => {
-    return {
-      painting,
-      position: positions[index],
-    }
-  })
-}
-
 // Constants
 const PAINTINGS_PER_PAGE = 12
 const HERO_HEIGHT = "100vh" // Full viewport height for hero section
+
+// Mock genres for now, replace with actual data fetching later
+const genres = ["All", "Abstract", "Landscape", "Portrait", "Still Life", "Uncategorized"]
 
 export default function HomePage() {
   const [allPaintings, setAllPaintings] = useState<Painting[]>([])
@@ -107,6 +69,23 @@ export default function HomePage() {
   // Filter states
   const [selectedGenre, setSelectedGenre] = useState<string>("All")
   const [availabilityFilter, setAvailabilityFilter] = useState<string>("All")
+
+  // Pagination handlers
+  const handleLoadMoreAll = () => {
+    setAllPaintingsToShow((prev) => prev + PAINTINGS_PER_PAGE)
+  }
+
+  const handleShowLessAll = () => {
+    setAllPaintingsToShow((prev) => Math.max(PAINTINGS_PER_PAGE, prev - PAINTINGS_PER_PAGE))
+  }
+
+  const handleLoadMoreInProgress = () => {
+    setInProgressPaintingsToShow((prev) => prev + PAINTINGS_PER_PAGE)
+  }
+
+  const handleShowLessInProgress = () => {
+    setInProgressPaintingsToShow((prev) => Math.max(PAINTINGS_PER_PAGE, prev - PAINTINGS_PER_PAGE))
+  }
 
   // Fetch paintings on component mount
   useEffect(() => {
@@ -174,38 +153,6 @@ export default function HomePage() {
     // Don't reset featured pagination on filter change
   }, [selectedGenre, availabilityFilter, allPaintings, inProgressPaintings, featuredPaintings])
 
-  // Generate the collage layout
-  const collageItems = generateCollageLayout(allPaintings.filter((p) => !p.inProgress))
-
-  // Get unique genres from all paintings
-  const genres = ["All", ...new Set(allPaintings.filter((p) => p.genre).map((p) => p.genre as string)), "Uncategorized"]
-
-  // Load more handlers
-  const handleLoadMoreFeatured = () => {
-    setFeaturedPaintingsToShow((prev) => prev + PAINTINGS_PER_PAGE)
-  }
-
-  const handleLoadMoreAll = () => {
-    setAllPaintingsToShow((prev) => prev + PAINTINGS_PER_PAGE)
-  }
-
-  const handleLoadMoreInProgress = () => {
-    setInProgressPaintingsToShow((prev) => prev + PAINTINGS_PER_PAGE)
-  }
-
-  // Show less handlers
-  const handleShowLessFeatured = () => {
-    setFeaturedPaintingsToShow(PAINTINGS_PER_PAGE)
-  }
-
-  const handleShowLessAll = () => {
-    setAllPaintingsToShow(PAINTINGS_PER_PAGE)
-  }
-
-  const handleShowLessInProgress = () => {
-    setInProgressPaintingsToShow(PAINTINGS_PER_PAGE)
-  }
-
   // Slice paintings for display
   const displayedFeaturedPaintings = filteredFeaturedPaintings.slice(0, featuredPaintingsToShow)
   const displayedAllPaintings = filteredPaintings.slice(0, allPaintingsToShow)
@@ -217,58 +164,11 @@ export default function HomePage() {
       <section className="fixed top-16 left-0 right-0 z-0" style={{ height: HERO_HEIGHT }}>
         {/* Backdrop Image - Using the updated gallery wall image */}
         <div className="absolute inset-0">
-          <Image
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Gallary%20Wall%20cropped.jpg-MwSy8jdAtYrON05hMqmBYUeuuIzcua.jpeg"
-            alt="Art Gallery Wall"
-            fill
-            className="object-cover"
-            priority
-          />
+          <Image src="/gallery-wall.jpg" alt="Art Gallery Wall" fill className="object-cover" priority />
         </div>
 
         {/* Collage of Paintings */}
-        <div className="absolute inset-0">
-          <div className="relative w-full h-full max-w-6xl mx-auto">
-            {collageItems.map((item, index) => {
-              const { painting, position } = item
-              const { width, height, scale } = getRelativeSize(painting.dimensions)
-
-              // Base size that will be scaled
-              const baseHeight = 120 // Adjust this value to control overall size
-
-              // Calculate display height and width while maintaining aspect ratio
-              const displayHeight = baseHeight * scale
-              const displayWidth = (width / height) * displayHeight
-
-              return (
-                <Link
-                  key={`collage-${painting.id}`}
-                  href={`/painting/${painting.id}`}
-                  className="absolute shadow-md hover:shadow-lg transition-all duration-300"
-                  style={{
-                    left: `${position.x}px`,
-                    top: `${position.y}px`,
-                    height: `${displayHeight}px`,
-                    width: `${displayWidth}px`,
-                    zIndex: position.z,
-                    margin: "10px", // Increased margin to prevent overlaps
-                  }}
-                >
-                  <div className="relative w-full h-full">
-                    <Image
-                      src={painting.imageUrl || "/placeholder.svg?height=200&width=150"}
-                      alt={painting.title}
-                      fill
-                      className="object-cover"
-                      sizes={`${Math.round(displayWidth)}px`}
-                      unoptimized={painting.imageUrl?.startsWith("https://firebasestorage.googleapis.com")}
-                    />
-                  </div>
-                </Link>
-              )
-            })}
-          </div>
-        </div>
+        <div className="absolute inset-0"></div>
       </section>
 
       {/* Spacer to push content below the hero */}
@@ -285,11 +185,14 @@ export default function HomePage() {
         <section className="py-12 bg-ivory border-b">
           <div className="container px-4 md:px-6">
             <div className="text-center max-w-2xl mx-auto">
-              <h1 className="text-3xl tracking-wider sm:text-4xl md:text-5xl mb-4">
-                <span className="font-light tracking-wider font-[Beirut,sans-serif]">D.Coppard Fine Art</span>{" "}
-                <span className="font-['Times_New_Roman'] italic font-medium tracking-wider">Gallery</span>
-              </h1>
-              <p className="text-muted-foreground md:text-xl">
+              <div className="relative inline-block">
+                <h1 className="text-3xl tracking-wider sm:text-4xl md:text-5xl mb-4">
+                  <span className="font-light tracking-wider font-[Beirut,sans-serif]">D.Coppard Fine Art</span>{" "}
+                  <span className="font-['Times_New_Roman'] italic font-light tracking-wider">Gallery</span>
+                </h1>
+                <div className="h-px bg-gray-400 w-[85%] absolute -bottom-1 left-[7.5%]"></div>
+              </div>
+              <p className="text-muted-foreground md:text-xl mt-6">
                 <ColoredText>De gustibus non est disputandum.</ColoredText>
               </p>
             </div>
@@ -301,7 +204,7 @@ export default function HomePage() {
             <div className="container px-4 md:px-6">
               <div className="flex flex-col md:flex-row md:items-center justify-between mb-4">
                 <div className="flex items-center">
-                  <h2 className="text-2xl font-bold tracking-tighter">Featured Work</h2>
+                  <h2 className="text-2xl font-light tracking-wider">Featured Work</h2>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -338,7 +241,7 @@ export default function HomePage() {
         <section className="py-8 md:py-12 bg-ivory">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold tracking-tighter">Completed Works</h2>
+              <h2 className="text-2xl font-light tracking-wider">Completed Works</h2>
 
               <div className="flex flex-wrap gap-2 mt-4 md:mt-0 justify-end">
                 {/* Genre Filter */}
@@ -446,7 +349,7 @@ export default function HomePage() {
             <div className="container px-4 md:px-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center">
-                  <h2 className="text-2xl font-bold tracking-tighter">Works in Progress</h2>
+                  <h2 className="text-2xl font-light tracking-wider">Works in Progress</h2>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -479,15 +382,23 @@ export default function HomePage() {
                     </div>
 
                     {/* Pagination controls */}
-                    <div className="flex justify-center gap-4 mt-8">
+                    <div className="flex justify-center gap-4 mt-8 bg-dark p-4 w-full">
                       {inProgressPaintingsToShow > PAINTINGS_PER_PAGE && (
-                        <Button variant="outline" onClick={handleShowLessInProgress} className="min-w-[150px]">
+                        <Button
+                          variant="outline"
+                          onClick={handleShowLessInProgress}
+                          className="min-w-[150px] bg-ivory hover:bg-ivory/90"
+                        >
                           Show Less
                         </Button>
                       )}
 
                       {displayedInProgressPaintings.length < filteredInProgressPaintings.length && (
-                        <Button variant="outline" onClick={handleLoadMoreInProgress} className="min-w-[150px]">
+                        <Button
+                          variant="outline"
+                          onClick={handleLoadMoreInProgress}
+                          className="min-w-[150px] bg-ivory hover:bg-ivory/90"
+                        >
                           Show 12 More
                         </Button>
                       )}

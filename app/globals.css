@@ -80,16 +80,18 @@
   }
 }
 
-//
-Add these CSS rules to set your custom font for specific elements
-// For example, to use your custom font for headings:
-
-h1, h2, h3, h4, h5, h6 {
+/* Add these CSS rules to set your custom font for specific elements */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-custom);
 }
 
-//
-Or to use it for specific classes .custom-font {
+/* Or to use it for specific classes */
+.custom-font {
   font-family: var(--font-custom);
 }
 

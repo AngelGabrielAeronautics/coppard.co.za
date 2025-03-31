@@ -6,50 +6,59 @@ export default function AboutPage() {
     <MainLayout>
       <div className="container px-4 py-12 md:px-6 md:py-16 bg-ivory">
         <div className="max-w-3xl mx-auto space-y-8">
-          <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">About the Artist</h1>
+          <h1 className="text-3xl font-light tracking-wider sm:text-4xl md:text-5xl">About the Artist</h1>
 
           <div className="prose prose-stone dark:prose-invert max-w-none">
             <p>
               <ColoredText>
-                Dylan Coppard is a contemporary oil painter known for capturing the essence of light and emotion in
-                their work. With a background in traditional techniques and a passion for exploring new artistic
-                boundaries, Dylan creates pieces that resonate with viewers on a deep emotional level.
+                My name is Dylan Coppard, and I'm an artist based in Jersey, Channel Islands. Born and raised in
+                Johannesburg, South Africa, my journey into art began in childhood, marked by a natural talent and
+                passion for creating. During my secondary school years, I studied fine art, graphic design, and
+                sculpture, laying a foundational appreciation for artistic expression.
               </ColoredText>
             </p>
 
             <p>
               <ColoredText>
-                Having studied at prestigious art institutions and exhibited in galleries across the country, Dylan has
-                developed a distinctive style that blends classical techniques with modern sensibilities. Each painting
-                is a labor of love, often taking weeks or months to complete as layers of oil paint are carefully
-                applied and developed.
+                After several years building a successful tourism-based business in Johannesburg, I faced significant
+                setbacks when the COVID-19 pandemic struck in 2020. The impact on the tourism industry was devastating,
+                prompting my family's relocation to Jersey, where we established our new home.
               </ColoredText>
             </p>
 
             <p>
               <ColoredText>
-                The artist draws inspiration from nature, human connections, and the interplay of light and shadow.
-                Through careful observation and technical mastery, Dylan creates works that invite viewers to pause,
-                reflect, and connect with the deeper meanings embedded in each piece.
+                In 2023, amidst ongoing challenges to revive my tourism business, I rediscovered my love for art as a
+                therapeutic outlet. Encouraged by supportive viewers and admirers of my work, I transitioned towards
+                professional artistry in 2025, embracing the opportunity to sell my artwork to provide for my family.
               </ColoredText>
             </p>
 
-            <h2>Artist Statement</h2>
+            <p>
+              <ColoredText>
+                My artistic focus centers around portraits and figurative works, deeply influenced by classical and
+                medieval art periods, as well as the evocative portraits from the dawn of photography in the 1800s.
+                Additionally, the elegance of 1950s-era depictions of women and the striking portraiture style of John
+                Singer Sargent captivate my imagination.
+              </ColoredText>
+            </p>
+
+            <h2 className="font-light tracking-wider">Artistic Influences</h2>
+
+            <p>
+              <ColoredText>
+                Among my greatest artistic influences are John William Waterhouse, John Singer Sargent, Aaron
+                Westerberg, and William-Adolphe Bouguereau, whose subject matter and techniques continually inspire my
+                creations.
+              </ColoredText>
+            </p>
 
             <blockquote>
               <ColoredText>
-                "My work explores the boundaries between reality and perception, using oil paint to capture fleeting
-                moments of beauty and truth. I believe that art has the power to transform how we see the world around
-                us, revealing the extraordinary within the ordinary."
+                "Through my art, I strive to capture emotional depth and timeless beauty, inviting viewers to connect
+                intimately with each piece."
               </ColoredText>
             </blockquote>
-
-            <p>
-              <ColoredText>
-                When not in the studio, Dylan can be found teaching workshops, exploring nature for new inspiration, or
-                experimenting with new techniques and approaches to the timeless medium of oil painting.
-              </ColoredText>
-            </p>
           </div>
         </div>
       </div>

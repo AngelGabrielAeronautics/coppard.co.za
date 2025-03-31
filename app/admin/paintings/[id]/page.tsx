@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { PaintingForm } from "@/components/painting-form"
-import { getPainting } from "@/lib/db"
+import { getPainting, getPaintings } from "@/lib/db"
 import type { Painting } from "@/types/painting"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
@@ -17,6 +17,7 @@ export default function EditPaintingPage() {
 
   const isNewPainting = id === "new"
   const [painting, setPainting] = useState<Painting | null>(null)
+  const [allPaintings, setAllPaintings] = useState<Painting[]>([])
   const [loading, setLoading] = useState(!isNewPainting) // Don't show loading for new paintings
   const [error, setError] = useState<string | null>(null)
 
@@ -54,6 +55,10 @@ export default function EditPaintingPage() {
 
         console.log("Painting data:", data)
         setPainting(data)
+
+        // Also fetch all paintings for navigation
+        const paintings = await getPaintings()
+        setAllPaintings(paintings)
       } catch (error) {
         console.error("Error fetching painting:", error)
         setError("Failed to load painting")
@@ -91,7 +96,7 @@ export default function EditPaintingPage() {
   return (
     <div className="container px-4 py-8 md:px-6 md:py-12">
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold">{isNewPainting ? "Add New Painting" : "Edit Painting"}</h1>
+        <h1 className="text-3xl font-light tracking-wider">{isNewPainting ? "Add New Painting" : "Edit Painting"}</h1>
         <button
           onClick={() => router.push("/admin")}
           className="p-2 rounded-full hover:bg-gray-100 transition-colors"
@@ -100,7 +105,12 @@ export default function EditPaintingPage() {
           <X className="h-6 w-6 text-gray-500 hover:text-dark" />
         </button>
       </div>
-      <PaintingForm painting={painting as Painting} isEditing={!isNewPainting} twoColumnLayout={true} />
+      <PaintingForm
+        painting={painting as Painting}
+        isEditing={!isNewPainting}
+        twoColumnLayout={true}
+        allPaintings={allPaintings}
+      />
     </div>
   )
 }

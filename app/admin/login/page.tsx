@@ -5,7 +5,7 @@ import type React from "react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Palette } from "lucide-react"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
@@ -49,8 +49,14 @@ export default function LoginPage() {
     <div className="flex min-h-screen flex-col items-center justify-center px-4 py-12 bg-background">
       <div className="mx-auto w-full max-w-md space-y-6">
         <div className="flex flex-col items-center space-y-2 text-center">
-          <Palette className="h-10 w-10" />
-          <h1 className="text-2xl font-bold">D.Coppard Fine Art Admin</h1>
+          <Image
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/D%20Coppard%20Fine%20Art%20Logo%20-%20middle-3NGLqWn0DLFEhvwI9L5PResNV8EOj5.png"
+            alt="D.Coppard Fine Art"
+            width={28}
+            height={7}
+            className="h-auto w-auto mb-4"
+          />
+          <h1 className="text-2xl font-light tracking-wider">D.Coppard Fine Art Admin</h1>
           {/* Update the paragraph text to use ColoredText */}
           <p className="text-sm text-muted-foreground">
             <ColoredText>Enter your credentials to access the admin dashboard.</ColoredText>

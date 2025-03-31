@@ -1,36 +1,45 @@
 "use client"
-
-import type React from "react"
-
-import { useState } from "react"
 import { MainLayout } from "@/components/main-layout"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
-import { Mail, Phone, MapPin } from "lucide-react"
-// Import the ColoredText component
+import { Mail } from "lucide-react"
+import Image from "next/image"
 import { ColoredText } from "@/components/colored-text"
+import { submitContactForm } from "@/lib/actions"
+import { useFormStatus } from "react-dom"
 
 export default function ContactPage() {
   const { toast } = useToast()
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+  const handleSubmit = async (formData: FormData) => {
+    const result = await submitContactForm(formData)
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    if (result.success) {
+      toast({
+        title: "Message sent!",
+        description: <ColoredText>Thank you for your message. We'll get back to you soon.</ColoredText>,
+      })
+      // Reset the form
+      ;(document.getElementById("contact-form") as HTMLFormElement)?.reset()
+    } else {
+      toast({
+        title: "Error",
+        description: result.error || "Failed to send message. Please try again.",
+        variant: "destructive",
+      })
+    }
+  }
 
-    // Update the toast message
-    toast({
-      title: "Message sent!",
-      description: <ColoredText>Thank you for your message. We'll get back to you soon.</ColoredText>,
-    })
+  function SubmitButton() {
+    const { pending } = useFormStatus()
 
-    setIsSubmitting(false)
-    ;(e.target as HTMLFormElement).reset()
+    return (
+      <Button type="submit" className="w-full" disabled={pending}>
+        {pending ? "Sending..." : "Send Message"}
+      </Button>
+    )
   }
 
   return (
@@ -38,7 +47,7 @@ export default function ContactPage() {
       <div className="container px-4 py-12 md:px-6 md:py-16">
         <div className="grid gap-8 md:grid-cols-2">
           <div>
-            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl">Get in Touch</h1>
+            <h1 className="text-3xl font-light tracking-wider sm:text-4xl">Get in Touch</h1>
             {/* Update the paragraph text to use ColoredText */}
             <p className="mt-4 text-muted-foreground">
               <ColoredText>
@@ -52,19 +61,47 @@ export default function ContactPage() {
                 <Mail className="h-5 w-5 text-muted-foreground" />
                 <span>dylan@coppard.je</span>
               </div>
-              <div className="flex items-center gap-3">
-                <Phone className="h-5 w-5 text-muted-foreground" />
-                <span>(123) 456-7890</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <MapPin className="h-5 w-5 text-muted-foreground" />
-                <span>123 Art Studio Lane, Paintsville, AR 12345</span>
+
+              {/* Jersey location information */}
+              <div className="my-6 rounded-lg overflow-hidden shadow-md">
+                <div className="relative w-full">
+                  {/* Map and flag container */}
+                  <div className="flex flex-col md:flex-row">
+                    {/* Map of Jersey */}
+                    <div className="relative w-full md:w-3/4 h-64 bg-ivory-darker">
+                      <Image
+                        src="/images/jersey-map.png"
+                        alt="Map of Jersey, Channel Islands"
+                        fill
+                        className="object-contain"
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                      />
+                    </div>
+
+                    {/* Flag of Jersey */}
+                    <div className="relative w-full md:w-1/4 h-40 md:h-64 flex items-center justify-center p-4 bg-ivory-darker">
+                      <div className="relative w-40 h-40 md:w-full md:h-full max-w-[180px] max-h-[200px]">
+                        <Image
+                          src="/images/jersey-flag.png"
+                          alt="Flag of Jersey"
+                          fill
+                          className="object-contain"
+                          sizes="180px"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-ivory-darker p-2 text-center text-sm text-muted-foreground">
+                    <span>Jersey, Channel Islands</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
           <div className="rounded-lg border p-6">
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form id="contact-form" action={handleSubmit} className="space-y-4">
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <label htmlFor="first-name" className="text-sm font-medium">
@@ -97,9 +134,7 @@ export default function ContactPage() {
                 </label>
                 <Textarea id="message" name="message" rows={5} required />
               </div>
-              <Button type="submit" className="w-full" disabled={isSubmitting}>
-                {isSubmitting ? "Sending..." : "Send Message"}
-              </Button>
+              <SubmitButton />
             </form>
           </div>
         </div>

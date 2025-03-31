@@ -47,19 +47,28 @@ export function PaintingCard({ painting }: PaintingCardProps) {
               unoptimized={painting.imageUrl?.startsWith("https://firebasestorage.googleapis.com")}
             />
           </div>
-          {painting.sold && (
-            <Badge variant="destructive" className="absolute top-2 right-2">
-              Sold
-            </Badge>
-          )}
-          {painting.inProgress && (
-            <Badge variant="secondary" className="absolute top-2 left-2 bg-amber-500 text-white">
-              In Progress
-            </Badge>
-          )}
+          {/* New corner badge design */}
+          <div className="absolute top-0 left-0 flex flex-col">
+            {painting.sold && (
+              <Badge
+                variant="destructive"
+                className="rounded-none rounded-br-md pointer-events-none px-3 py-1 bg-rose-200 text-rose-800 hover:bg-rose-200"
+              >
+                Sold
+              </Badge>
+            )}
+            {painting.inProgress && (
+              <Badge
+                variant="secondary"
+                className="rounded-none rounded-br-md pointer-events-none px-3 py-1 bg-amber-200 text-amber-800 mt-1 hover:bg-amber-200"
+              >
+                In Progress
+              </Badge>
+            )}
+          </div>
         </div>
         <CardContent className="p-4 flex-grow">
-          <h3 className="font-semibold text-lg">{painting.title}</h3>
+          <h3 className="font-light tracking-wider text-lg">{painting.title}</h3>
           <p className="text-sm text-muted-foreground">
             <ColoredText>
               {painting.medium}, {painting.year}
@@ -67,7 +76,7 @@ export function PaintingCard({ painting }: PaintingCardProps) {
           </p>
         </CardContent>
         <CardFooter className="p-4 pt-0 flex justify-between">
-          <p className="text-sm">{painting.dimensions}</p>
+          <p className="text-sm font-light tracking-wider">{painting.dimensions}</p>
           {painting.price && (
             <p className={`font-medium ${painting.sold ? "line-through text-muted-foreground" : ""}`}>
               £{painting.price}

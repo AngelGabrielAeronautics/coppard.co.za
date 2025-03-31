@@ -12,6 +12,7 @@ import {
 } from "firebase/firestore"
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage"
 import type { Painting } from "@/types/painting"
+import { v4 as uuidv4 } from "uuid"
 
 // Collection references
 const PAINTINGS_COLLECTION = "paintings"
@@ -158,7 +159,11 @@ function checkAuth() {
 }
 
 // Add a new painting - requires auth
-export async function addPainting(painting: Omit<Painting, "id" | "createdAt">, imageFile: File) {
+export async function addPainting(
+  painting: Omit<Painting, "id" | "createdAt">,
+  imageFile: File,
+  additionalImageFiles: File[] = [],
+) {
   // Check authentication
   const currentUser = auth.currentUser
   if (!currentUser) {
@@ -169,7 +174,7 @@ export async function addPainting(painting: Omit<Painting, "id" | "createdAt">, 
   try {
     console.log("Adding new painting with user:", currentUser.uid, currentUser.email)
 
-    // Upload image to storage with metadata
+    // Upload main image to storage with metadata
     const filename = `${Date.now()}_${imageFile.name.replace(/[^a-zA-Z0-9.]/g, "_")}`
     const storageRef = ref(storage, `paintings/${filename}`)
 
@@ -184,10 +189,33 @@ export async function addPainting(painting: Omit<Painting, "id" | "createdAt">, 
     const uploadResult = await uploadBytes(storageRef, imageFile, metadata)
     const imageUrl = await getDownloadURL(uploadResult.ref)
 
+    // Upload additional images if provided
+    const imageVersions: string[] = []
+
+    if (additionalImageFiles && additionalImageFiles.length > 0) {
+      for (const file of additionalImageFiles) {
+        const versionFilename = `${Date.now()}_${uuidv4()}_${file.name.replace(/[^a-zA-Z0-9.]/g, "_")}`
+        const versionRef = ref(storage, `paintings/versions/${versionFilename}`)
+
+        const versionMetadata = {
+          customMetadata: {
+            userId: currentUser.uid,
+            uploadedAt: new Date().toISOString(),
+            isVersion: "true",
+          },
+        }
+
+        const versionUploadResult = await uploadBytes(versionRef, file, versionMetadata)
+        const versionUrl = await getDownloadURL(versionUploadResult.ref)
+        imageVersions.push(versionUrl)
+      }
+    }
+
     // Add painting to Firestore
     const newPainting = {
       ...painting,
       imageUrl,
+      imageVersions: imageVersions.length > 0 ? imageVersions : [],
       createdAt: serverTimestamp(),
       userId: currentUser.uid,
     }
@@ -205,8 +233,9 @@ export async function updatePainting(
   id: string,
   painting: Partial<Omit<Painting, "id" | "createdAt">>,
   imageFile?: File,
+  additionalImageFiles: File[] = [],
 ) {
-  // Check authentication - make sure we have a valid user
+  // Check authentication
   const currentUser = auth.currentUser
   if (!currentUser) {
     console.error("Authentication error: No user logged in")
@@ -226,23 +255,34 @@ export async function updatePainting(
       throw new Error(`Painting with ID ${id} does not exist`)
     }
 
-    const updateData: any = { ...painting }
+    // Get the current painting data
+    const currentPainting = await getPainting(id)
+    if (!currentPainting) {
+      throw new Error(`Could not retrieve current painting data for ${id}`)
+    }
 
-    // If there's a new image, upload it and update the URL
+    // Clean the painting data to remove any undefined values
+    const updateData: Record<string, any> = {}
+
+    // Only include defined values in the update data
+    Object.entries(painting).forEach(([key, value]) => {
+      if (value !== undefined) {
+        updateData[key] = value
+      }
+    })
+
+    // If there's a new main image, upload it and update the URL
     if (imageFile) {
-      console.log(`Preparing to upload new image for painting ${id}:`, imageFile.name, imageFile.size)
+      console.log(`Preparing to upload new main image for painting ${id}:`, imageFile.name, imageFile.size)
 
       // Validate image file
       if (imageFile.size > 5 * 1024 * 1024) {
         throw new Error("Image file is too large. Maximum size is 5MB.")
       }
 
-      // Get the current painting to get the old image URL
-      const currentPainting = await getPainting(id)
-
       // Upload new image first - do this before trying to delete the old one
       try {
-        console.log(`Starting upload for new image: ${imageFile.name}`)
+        console.log(`Starting upload for new main image: ${imageFile.name}`)
 
         // Create a unique filename to avoid conflicts
         const filename = `${Date.now()}_${imageFile.name.replace(/[^a-zA-Z0-9.]/g, "_")}`
@@ -276,7 +316,9 @@ export async function updatePainting(
         }
       } catch (uploadError) {
         console.error("Error uploading new image:", uploadError)
-        throw new Error(`Failed to upload image: ${uploadError.message || "Unknown error"}. Please try again.`)
+        throw new Error(
+          `Failed to upload image: ${uploadError instanceof Error ? uploadError.message : "Unknown error"}. Please try again.`,
+        )
       }
 
       // Now try to delete the old image if it exists and isn't a placeholder
@@ -295,6 +337,41 @@ export async function updatePainting(
           console.error("Error deleting old image:", error)
         }
       }
+    }
+
+    // Handle additional images if provided
+    if (additionalImageFiles && additionalImageFiles.length > 0) {
+      // Process and upload new additional images
+      const newVersionUrls: string[] = []
+
+      for (const file of additionalImageFiles) {
+        // Validate file size
+        if (file.size > 5 * 1024 * 1024) {
+          throw new Error("Additional image file is too large. Maximum size is 5MB.")
+        }
+
+        // Create unique filename for the version
+        const versionFilename = `${Date.now()}_${uuidv4()}_${file.name.replace(/[^a-zA-Z0-9.]/g, "_")}`
+        const versionRef = ref(storage, `paintings/versions/${versionFilename}`)
+
+        const versionMetadata = {
+          customMetadata: {
+            userId: currentUser.uid,
+            paintingId: id,
+            isVersion: "true",
+          },
+        }
+
+        // Upload the version
+        const versionUploadResult = await uploadBytes(versionRef, file, versionMetadata)
+        const versionUrl = await getDownloadURL(versionUploadResult.ref)
+        newVersionUrls.push(versionUrl)
+      }
+
+      // Combine existing versions with new versions
+      // Note: We're using imageVersions from updateData if it exists, otherwise from currentPainting
+      const existingVersions = updateData.imageVersions || currentPainting.imageVersions || []
+      updateData.imageVersions = [...existingVersions, ...newVersionUrls]
     }
 
     // Update the document

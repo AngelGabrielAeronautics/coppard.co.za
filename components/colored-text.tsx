@@ -26,7 +26,26 @@ export function ColoredText({ children, className = "" }: ColoredTextProps) {
     )
   }
 
-  // If it's not a string, return it as is
-  return <span className={className}>{children}</span>
+  // If it's not a string, we need to handle React elements differently
+  // For the footer and other components, we'll add a class that applies the styling globally
+  return (
+    <span className={`colored-text-container ${className}`}>
+      {children}
+      <style jsx global>{`
+        .colored-text-container .colored-period,
+        .colored-text-container span:not(.colored-period) {
+          color: inherit;
+        }
+        .colored-text-container {
+          font-style: italic;
+        }
+        footer p .colored-period,
+        footer .colored-period,
+        .colored-text-container .colored-period {
+          color: #952617;
+        }
+      `}</style>
+    </span>
+  )
 }
 
