@@ -19,7 +19,7 @@ export default function ContactPage() {
     if (result.success) {
       toast({
         title: "Message sent!",
-        description: <ColoredText>Thank you for your message. We'll get back to you soon.</ColoredText>,
+        description: <ColoredText>Thank you for your message. I'll get back to you soon.</ColoredText>,
       })
       // Reset the form
       ;(document.getElementById("contact-form") as HTMLFormElement)?.reset()
@@ -51,8 +51,8 @@ export default function ContactPage() {
             {/* Update the paragraph text to use ColoredText */}
             <p className="mt-4 text-muted-foreground">
               <ColoredText>
-                Interested in a painting or have questions about commissioning a piece? Fill out the form or contact us
-                directly.
+                Interested in a painting or have questions about commissioning a piece? Fill out the form or contact
+                Dylan directly.
               </ColoredText>
             </p>
 

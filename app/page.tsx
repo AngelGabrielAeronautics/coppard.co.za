@@ -44,6 +44,7 @@ function getRelativeSize(dimensionsStr: string): { width: number; height: number
 // Constants
 const PAINTINGS_PER_PAGE = 12
 const HERO_HEIGHT = "100vh" // Full viewport height for hero section
+const MOBILE_HERO_HEIGHT = "65vh" // Reduced height for mobile
 
 // Mock genres for now, replace with actual data fetching later
 const genres = ["All", "Abstract", "Landscape", "Portrait", "Still Life", "Uncategorized"]
@@ -161,21 +162,31 @@ export default function HomePage() {
   return (
     <MainLayout>
       {/* Fixed Hero Section with Painting Thumbnails in Collage */}
-      <section className="fixed top-16 left-0 right-0 z-0" style={{ height: HERO_HEIGHT }}>
+      <section
+        className="fixed top-16 left-0 right-0 z-0"
+        style={{ height: `clamp(${MOBILE_HERO_HEIGHT}, 65vh, ${HERO_HEIGHT})` }}
+      >
         {/* Backdrop Image - Using the updated gallery wall image */}
         <div className="absolute inset-0">
-          <Image src="/gallery-wall.jpg" alt="Art Gallery Wall" fill className="object-cover" priority />
+          <Image
+            src="/images/gallery-wall-1.jpg"
+            alt="Art Gallery Wall"
+            fill
+            className="object-cover sm:object-cover object-contain sm:object-position-center object-position-top"
+            priority
+          />
         </div>
 
         {/* Collage of Paintings */}
-        <div className="absolute inset-0"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-ivory/30 to-transparent"></div>
       </section>
 
       {/* Spacer to push content below the hero */}
-      <div style={{ height: `calc(${HERO_HEIGHT} - 30px)` }}></div>
+      <div className="sm:block hidden" style={{ height: `calc(${HERO_HEIGHT} - 150px)` }}></div>
+      <div className="sm:hidden block" style={{ height: `${MOBILE_HERO_HEIGHT}` }}></div>
 
       {/* Content that will slide over the hero */}
-      <div className="relative z-10 bg-ivory rounded-t-3xl shadow-[0_-15px_40px_rgba(0,0,0,0.2)] -mt-[30px]">
+      <div className="relative z-10 bg-ivory rounded-t-3xl shadow-[0_-15px_40px_rgba(0,0,0,0.2)] sm:-mt-[150px] -mt-[30px]">
         {/* Pull tab indicator */}
         <div className="absolute right-1/2 transform translate-x-1/2 -top-10 bg-ivory px-8 py-2 rounded-t-xl shadow-md">
           <ChevronUp className="h-5 w-5 text-dark/70" />

@@ -1,5 +1,6 @@
 import { MainLayout } from "@/components/main-layout"
 import { ColoredText } from "@/components/colored-text"
+import Image from "next/image"
 
 export default function AboutPage() {
   return (
@@ -8,17 +9,17 @@ export default function AboutPage() {
         <div className="max-w-3xl mx-auto space-y-8">
           <h1 className="text-3xl font-light tracking-wider sm:text-4xl md:text-5xl">About the Artist</h1>
 
-          <div className="prose prose-stone dark:prose-invert max-w-none">
-            <p>
+          <div className="space-y-6">
+            <p className="text-base">
               <ColoredText>
-                My name is Dylan Coppard, and I'm an artist based in Jersey, Channel Islands. Born and raised in
-                Johannesburg, South Africa, my journey into art began in childhood, marked by a natural talent and
-                passion for creating. During my secondary school years, I studied fine art, graphic design, and
-                sculpture, laying a foundational appreciation for artistic expression.
+                I'm an artist based in Jersey, Channel Islands. Born and raised in Johannesburg, South Africa, my
+                journey into art began in childhood, marked by a natural talent and passion for creating. During my
+                secondary school years, I studied fine art, graphic design, and sculpture, laying a foundational
+                appreciation for artistic expression.
               </ColoredText>
             </p>
 
-            <p>
+            <p className="text-base">
               <ColoredText>
                 After several years building a successful tourism-based business in Johannesburg, I faced significant
                 setbacks when the COVID-19 pandemic struck in 2020. The impact on the tourism industry was devastating,
@@ -26,7 +27,7 @@ export default function AboutPage() {
               </ColoredText>
             </p>
 
-            <p>
+            <p className="text-base">
               <ColoredText>
                 In 2023, amidst ongoing challenges to revive my tourism business, I rediscovered my love for art as a
                 therapeutic outlet. Encouraged by supportive viewers and admirers of my work, I transitioned towards
@@ -34,31 +35,36 @@ export default function AboutPage() {
               </ColoredText>
             </p>
 
-            <p>
+            <p className="text-base">
               <ColoredText>
                 My artistic focus centers around portraits and figurative works, deeply influenced by classical and
                 medieval art periods, as well as the evocative portraits from the dawn of photography in the 1800s.
-                Additionally, the elegance of 1950s-era depictions of women and the striking portraiture style of John
-                Singer Sargent captivate my imagination.
+                Additionally, the elegance of Gil Elvgren 1950s-era figures and the striking portraiture style of John
+                Singer Sargent and William-Adolphe Bouguereau captivate my imagination. Among my other artistic
+                influences are Aaron Westerberg, and Vladimir Volegov whose subject matter and techniques continually
+                inspire my creations.
               </ColoredText>
             </p>
 
-            <h2 className="font-light tracking-wider">Artistic Influences</h2>
-
-            <p>
-              <ColoredText>
-                Among my greatest artistic influences are John William Waterhouse, John Singer Sargent, Aaron
-                Westerberg, and William-Adolphe Bouguereau, whose subject matter and techniques continually inspire my
-                creations.
-              </ColoredText>
-            </p>
-
-            <blockquote>
+            <blockquote className="border-l-4 border-gray-300 pl-4 italic">
               <ColoredText>
                 "Through my art, I strive to capture emotional depth and timeless beauty, inviting viewers to connect
                 intimately with each piece."
               </ColoredText>
             </blockquote>
+
+            <div className="mt-8">
+              <p className="font-light tracking-wider text-xl mb-1">Dylan Coppard.</p>
+              <div className="w-48">
+                <Image
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/D%20Coppard%20Fine%20Art%20Logo%20-%20middle-3NGLqWn0DLFEhvwI9L5PResNV8EOj5.png"
+                  alt="D.Coppard Fine Art"
+                  width={260}
+                  height={65}
+                  className="h-auto w-auto"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
